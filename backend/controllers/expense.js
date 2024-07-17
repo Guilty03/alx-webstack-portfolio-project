@@ -1,9 +1,11 @@
+// Import the ExpenseSchema from the ExpenseModel file
 const ExpenseSchema = require("../models/ExpenseModel")
 
-
+// Export the addExpense function
 exports.addExpense = async(req, res) => {
     const {title, amount, category, description, date} = req.body
 
+    // Create a new expense object using the ExpenseSchema
     const expense = ExpenseSchema({
         title,
         amount,
@@ -13,7 +15,7 @@ exports.addExpense = async(req, res) => {
     })
     
     try {
-        // validations
+        // Perform validations
         if (!title || !category || !description || !date) {
             return res.status(400).json({message: 'All fields must be filled in!'})
         }
@@ -25,13 +27,14 @@ exports.addExpense = async(req, res) => {
         await expense.save()
         res.status(200).json({message: 'Expense added!'})
     } catch (error) {
-        console.error('Error details:', error); // Log detailed error
+        console.error('Error details:', error);
         res.status(500).json({ message: 'An error occurred while adding expense!' })
     }
 
     console.log(expense)
 }
 
+// Export the getExpense function
 exports.getExpense = async (req, res) => {
     try {
         const expenses = await ExpenseSchema.find().sort({createdAt: -1})
@@ -41,6 +44,7 @@ exports.getExpense = async (req, res) => {
     }
 }
 
+// Export the deleteExpense function
 exports.deleteExpense = async (req, res) => {
     const {id} = req.params;
     console.log(req.params);
