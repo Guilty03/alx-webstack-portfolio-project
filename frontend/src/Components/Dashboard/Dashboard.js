@@ -1,6 +1,5 @@
-
-import React, { useEffect } from 'react'
-import styled from 'styled-components'
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import { useGlobalContext } from '../../context/globalContext';
 import History from '../../History/History';
 import { InnerLayout } from '../../styles/Layouts';
@@ -8,12 +7,12 @@ import { dollar } from '../../utils/Icons';
 import Chart from '../Chart/Chart';
 
 function Dashboard() {
-    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext()
+    const { totalExpenses, incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext();
 
     useEffect(() => {
-        getIncomes()
-        getExpenses()
-    }, [])
+        getIncomes();
+        getExpenses();
+    }, []);
 
     return (
         <DashboardStyled>
@@ -44,105 +43,101 @@ function Dashboard() {
                         </div>
                     </div>
                     <div className="history-con">
-                        <History />
-                        <h2 className="salary-title">Min <span>Salary</span>Max</h2>
-                        <div className="salary-item">
-                            <p>
-                                ${Math.min(...incomes.map(item => item.amount))}
-                            </p>
-                            <p>
-                                ${Math.max(...incomes.map(item => item.amount))}
-                            </p>
-                        </div>
-                        <h2 className="salary-title">Min <span>Expense</span>Max</h2>
-                        <div className="salary-item">
-                            <p>
-                                ${Math.min(...expenses.map(item => item.amount))}
-                            </p>
-                            <p>
-                                ${Math.max(...expenses.map(item => item.amount))}
-                            </p>
+                        <h2>Recent History</h2>
+                        <div className="history-list">
+                            {expenses.map((expense) => (
+                                <div key={expense._id} className="history-item expense">
+                                    <p className="date">{expense.date}</p>
+                                    <p className="type">Expense</p>
+                                    <p className="amount">{dollar} {expense.amount}</p>
+                                </div>
+                            ))}
+                            {incomes.map((income) => (
+                                <div key={income._id} className="history-item income">
+                                    <p className="date">{income.date}</p>
+                                    <p className="type">Income</p>
+                                    <p className="amount">{dollar} {income.amount}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
             </InnerLayout>
         </DashboardStyled>
-    )
+    );
 }
 
 const DashboardStyled = styled.div`
-    .stats-con{
+    .stats-con {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: 1fr;
         gap: 2rem;
-        .chart-con{
-            grid-column: 1 / 4;
+        @media(min-width: 768px) {
+            grid-template-columns: 3fr 1fr;
+        }
+        .chart-con {
             height: 400px;
-            .amount-con{
+            .amount-con {
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 2rem;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
                 margin-top: 2rem;
-                .income, .expense{
-                    grid-column: span 2;
-                }
-                .income, .expense, .balance{
-                    background: #FCF6F9;
-                    border: 2px solid #FFFFFF;
-                    box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-                    border-radius: 20px;
+                .income, .expense, .balance {
+                    background: #f0f0f0;
+                    border-radius: 10px;
                     padding: 1rem;
-                    p{
-                        font-size: 3.5rem;
+                    text-align: center;
+                    h2 {
+                        margin-bottom: 1rem;
+                    }
+                    p {
+                        font-size: 2rem;
                         font-weight: 700;
                     }
                 }
-
-                .balance{
-                    grid-column: 2 / 4;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    p{
-                        color: var(--color-green);
-                        opacity: 0.6;
-                        font-size: 4.5rem;
-                    }
+                .balance p {
+                    color: green;
                 }
             }
         }
-
-        .history-con{
-            grid-column: 4 / -1;
-            h2{
+        .history-con {
+            h2 {
                 margin: 1rem 0;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
             }
-            .salary-title{
-                font-size: 1.2rem;
-                span{
-                    font-size: 1.8rem;
+            .history-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+                .history-item {
+                    background: #f0f0f0;
+                    border-radius: 10px;
+                    padding: 1rem;
+                    text-align: center;
+                    p {
+                        margin: 0.5rem 0;
+                        &.date {
+                            font-size: 0.9rem;
+                            color: #888;
+                        }
+                        &.type {
+                            font-size: 1.1rem;
+                            color: #555;
+                        }
+                        &.amount {
+                            font-size: 1.5rem;
+                            color: #222;
+                        }
+                    }
                 }
-            }
-            .salary-item{
-                background: #FCF6F9;
-                border: 2px solid #FFFFFF;
-                box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-                padding: 1rem;
-                border-radius: 20px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                p{
-                    font-weight: 600;
-                    font-size: 1.6rem;
+                .expense {
+                    background: #ffdddd;
+                }
+                .income {
+                    background: #ddffdd;
                 }
             }
         }
     }
 `;
 
-export default Dashboard
+export default Dashboard;
